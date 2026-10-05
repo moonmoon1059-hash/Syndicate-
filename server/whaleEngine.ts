@@ -284,7 +284,7 @@ let cachedBtcMacro: BtcMacroStatus = {
 
 async function getBtcMacroDumpShieldStatus(): Promise<BtcMacroStatus> {
   const now = Date.now();
-  if (now - cachedBtcMacro.checkedAt < 15000) {
+  if (now - cachedBtcMacro.checkedAt < 135000) {
     return cachedBtcMacro;
   }
 
@@ -402,7 +402,7 @@ interface CandleMetricsCache {
   cachedAt: number;
 }
 const candleMetricsCache = new Map<string, CandleMetricsCache>();
-const CANDLE_CACHE_TTL_MS = 45000; // 45 seconds
+const CANDLE_CACHE_TTL_MS = 435000; // 45 seconds
 
 /**
  * Flushes all stale active signals, watches, and caches to wipe corrupt candidates on deployment
