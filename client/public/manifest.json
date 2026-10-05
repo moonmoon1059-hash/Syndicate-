@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "short_name": "Syndicate",
+  "name": "Syndicate Analyst — Whale Radar",
+  "description": "Autonomous dual-mode institutional whale footprint and structural orderflow execution radar.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0B0E14",
+  "background_color": "#0B0E14",
+  "categories": ["finance", "crypto", "business"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

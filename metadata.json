@@ -1,0 +1,6 @@
+{
+  "name": "MoonScanner",
+  "description": "Professional event-driven cryptocurrency market intelligence, pre-move detection, news catalysts, new listings radar, and Telegram alert system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
