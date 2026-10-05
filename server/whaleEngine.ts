@@ -289,11 +289,11 @@ async function getBtcMacroDumpShieldStatus(): Promise<BtcMacroStatus> {
   }
 
   try {
-    const res = await fetch('https://fapi1.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=20', {
+    const res = await fetch('https://fapi3.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=20', {
       signal: AbortSignal.timeout(3500)
     });
     if (!res.ok) return cachedBtcMacro;
-    const data: any[] = await res.json();
+    const data: any[] = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(res));
     if (!Array.isArray(data) || data.length < 15) return cachedBtcMacro;
 
     const closes = data.map(d => parseFloat(d[4]));
@@ -352,13 +352,13 @@ async function fetchOpenInterestDelta(symbol: string): Promise<number> {
   }
 
   try {
-    const res = await fetch(`https://fapi1.binance.com/futures/data/openInterestHist?symbol=${cleanSym}&period=1h&limit=2`, {
+    const res = await fetch(`https://fapi3.binance.com/futures/data/openInterestHist?symbol=${cleanSym}&period=1h&limit=2`, {
       signal: AbortSignal.timeout(3000)
     });
     if (!res.ok) {
       return cached ? cached.oiDeltaPct : 0;
     }
-    const data: any[] = await res.json();
+    const data: any[] = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(res));
     if (!Array.isArray(data) || data.length < 2) {
       return cached ? cached.oiDeltaPct : 0;
     }
@@ -521,7 +521,7 @@ async function fetch15mCandleMetrics(symbol: string, currentPrice: number, direc
   }
 
   try {
-    const res = await fetch(`https://fapi1.binance.com/fapi/v1/klines?symbol=${cleanSym}&interval=15m&limit=21`, {
+    const res = await fetch(`https://fapi3.binance.com/fapi/v1/klines?symbol=${cleanSym}&interval=15m&limit=21`, {
       signal: AbortSignal.timeout(3500)
     });
 
@@ -529,7 +529,7 @@ async function fetch15mCandleMetrics(symbol: string, currentPrice: number, direc
       throw new Error(`Klines error ${res.status}`);
     }
 
-    const data: any[] = await res.json();
+    const data: any[] = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(res));
     if (!Array.isArray(data) || data.length < 5) {
       const fallbackLev = computeRiskAdaptiveLeverage(2.0);
       return {
@@ -1622,8 +1622,8 @@ export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCan
 
     try {
       const [tickerRes, premiumRes, btcMacro] = await Promise.all([
-        fetch(`https://fapi1.binance.com/fapi/v1/ticker/24hr?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
-        fetch(`https://fapi1.binance.com/fapi/v1/premiumIndex?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
+        fetch(`https://fapi3.binance.com/fapi/v1/ticker/24hr?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
+        fetch(`https://fapi3.binance.com/fapi/v1/premiumIndex?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
         getBtcMacroDumpShieldStatus()
       ]);
 
@@ -1631,8 +1631,8 @@ export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCan
         continue;
       }
 
-      const t = await tickerRes.json();
-      const p = await premiumRes.json();
+      const t = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(tickerRes));
+      const p = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(premiumRes));
 
       const lastRate = parseFloat(p.lastFundingRate);
       const fundingFeePct = isNaN(lastRate) ? 0.01 : Number((lastRate * 100).toFixed(4));
@@ -1708,8 +1708,8 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
   try {
     // 1. Concurrently fetch Tickers, Premium Index, and BTC Macro Shield status
     const [tickerRes, premiumRes, btcMacro] = await Promise.all([
-      fetch('https://fapi1.binance.com/fapi/v1/ticker/24hr', { signal: AbortSignal.timeout(6000) }),
-      fetch('https://fapi1.binance.com/fapi/v1/premiumIndex', { signal: AbortSignal.timeout(6000) }),
+      fetch('https://fapi3.binance.com/fapi/v1/ticker/24hr', { signal: AbortSignal.timeout(65000) }),
+      fetch('https://fapi3.binance.com/fapi/v1/premiumIndex', { signal: AbortSignal.timeout(65000) }),
       getBtcMacroDumpShieldStatus()
     ]);
 
@@ -1717,8 +1717,8 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
       throw new Error(`Binance API error: ticker=${tickerRes.status}, premium=${premiumRes.status}`);
     }
 
-    const tickers: any[] = await tickerRes.json();
-    const premiumData: any[] = await premiumRes.json();
+    const tickers: any[] = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(tickerRes));
+    const premiumData: any[] = (await (async (r) => { const t = await r.text(); try { return JSON.parse(t); } catch(e) { return null; } })(premiumRes));
 
     if (!Array.isArray(tickers) || !Array.isArray(premiumData)) {
       throw new Error('Invalid response structure from Binance Futures');
@@ -1913,7 +1913,7 @@ export function startSyndicateScanner(): void {
 
   scanIntervalHandle = setInterval(() => {
     runSyndicateScan().catch(() => {});
-  }, 6000);
+  }, 65000);
 }
 
 export function stopSyndicateScanner(): void {
