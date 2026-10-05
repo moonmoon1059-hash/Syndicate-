@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "short_name": "Syndicate",
-  "name": "Syndicate Analyst — Whale Radar",
+  "short_name": "MoonScanner",
+  "name": "MoonScanner Pro — Whale Radar",
   "description": "Autonomous dual-mode institutional whale footprint and structural orderflow execution radar.",
   "start_url": "/",
   "scope": "/",

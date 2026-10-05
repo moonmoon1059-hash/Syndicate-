@@ -55,7 +55,7 @@ export function playAlertChime(): void {
 const notifiedSymbolsCooldown = new Map<string, number>();
 const CLIENT_COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes
 
-const STORAGE_KEY = 'syndicate_alerts_enabled';
+const STORAGE_KEY = 'moonscanner_alerts_enabled';
 
 export class NotificationService {
   private static alertsEnabled: boolean = typeof window !== 'undefined'
@@ -164,7 +164,7 @@ export class NotificationService {
             body,
             icon: '/icon.svg',
             badge: '/icon.svg',
-            tag: `syndicate-${sym}`
+            tag: `moonscanner-${sym}`
           } as NotificationOptions);
 
           notification.onclick = () => {

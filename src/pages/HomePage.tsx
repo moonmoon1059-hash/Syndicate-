@@ -425,11 +425,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateTab, onSelectSigna
                 <span>🔥 Supernova ({supernovaRunners.length || topQualifiedSetups.filter(isSupernovaCandidate).length})</span>
               </button>
               <button
-                onClick={() => onNavigateTab('syndicate')}
+                onClick={() => onNavigateTab('moonscanner')}
                 className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30 shadow-sm"
               >
                 <Zap className="w-3 h-3 fill-emerald-400" />
-                <span>Syndicate (Whale Grid)</span>
+                <span>MoonScanner (Whale Grid)</span>
               </button>
             </div>
           </div>

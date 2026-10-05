@@ -1,8 +1,8 @@
 import { getBangladeshTimeString } from './telegramService';
 
-export type SyndicateTier = 'VALID' | 'CONFLUENCE' | 'OBSERVE';
-export type SyndicateDirection = 'LONG' | 'SHORT';
-export type SyndicateExecutionMode =
+export type MoonScannerTier = 'VALID' | 'CONFLUENCE' | 'OBSERVE';
+export type MoonScannerDirection = 'LONG' | 'SHORT';
+export type MoonScannerExecutionMode =
   | '🚀 IMPULSE EXECUTION (NO RETEST)'
   | '⚡ ENTRY NOW'
   | '⏳ WAIT FOR RETEST'
@@ -12,15 +12,15 @@ export type SyndicateExecutionMode =
   | '🎯 BUY THE RETEST DIP'
   | '🔥 SFP RECLAIM (LIQUIDITY HUNT COMPLETED)';
 
-export interface SyndicateCandidate {
+export interface MoonScannerCandidate {
   id: string;
   symbol: string;
   baseAsset: string;
-  direction: SyndicateDirection;
+  direction: MoonScannerDirection;
   markPrice: number;
   score: number; // e.g. 109, 95, 83
-  tier: SyndicateTier;
-  executionMode: SyndicateExecutionMode;
+  tier: MoonScannerTier;
+  executionMode: MoonScannerExecutionMode;
   executionLabel: string; // e.g. '🚀 IMPULSE ENTRY' | '⚡ ENTRY NOW' | '⏳ WAIT FOR RETEST' | '✅ RETEST CONFIRMED'
   executionGuidance: string;
   entryZone: string; // e.g. '$1.3140 - $1.3271 (+1.0%)'
@@ -57,7 +57,7 @@ export interface SyndicateCandidate {
   binanceUrl: string;
 }
 
-export interface SyndicateEngineTelemetry {
+export interface MoonEngineTelemetry {
   lastScanTimestamp: number;
   lastScanFormatted: string;
   totalMonitored: number;
@@ -71,7 +71,7 @@ export interface SyndicateEngineTelemetry {
 }
 
 // Global in-memory cache of scanned candidates
-let cachedSyndicateCandidates: SyndicateCandidate[] = [];
+let cachedMoonScannerCandidates: MoonScannerCandidate[] = [];
 let lastScanTimestamp = 0;
 let isScanInProgress = false;
 let scanDurationMs = 0;
@@ -80,14 +80,14 @@ let scanDurationMs = 0;
 const telegramAlertCooldownMap = new Map<string, number>();
 const TELEGRAM_ALERT_COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes
 
-export function isSymbolInSyndicateTelegramCooldown(symbol: string): boolean {
+export function isSymbolInMoonScannerTelegramCooldown(symbol: string): boolean {
   const clean = symbol.replace(/[^A-Z0-9]/gi, '').toUpperCase();
   const lastTime = telegramAlertCooldownMap.get(clean);
   if (!lastTime) return false;
   return Date.now() - lastTime < TELEGRAM_ALERT_COOLDOWN_MS;
 }
 
-export function markSymbolSyndicateDispatched(symbol: string): void {
+export function markSymbolMoonScannerDispatched(symbol: string): void {
   const clean = symbol.replace(/[^A-Z0-9]/gi, '').toUpperCase();
   telegramAlertCooldownMap.set(clean, Date.now());
 }
@@ -134,7 +134,7 @@ export function isBlacklistedAsset(symbol: string): boolean {
 // DIRECTION LATCHING & PERSISTENT 60-MINUTE LOCK ENGINE
 // ============================================================================
 interface DirectionLockRecord {
-  direction: SyndicateDirection;
+  direction: MoonScannerDirection;
   lockedAt: number;
   invalidationPrice: number;
   lockedPrice: number;
@@ -151,7 +151,7 @@ function getOrLockDirection(params: {
   change1h: number;
   change15m: number;
   change24h: number;
-}): SyndicateDirection {
+}): MoonScannerDirection {
   const cleanSym = params.symbol.replace(/[^A-Z0-9]/gi, '').toUpperCase();
   const now = Date.now();
   const existingLock = symbolDirectionLockMap.get(cleanSym);
@@ -204,7 +204,7 @@ function getOrLockDirection(params: {
   }
 
   // Fallback if 1h is 0.0% and no active lock
-  const fallbackDir: SyndicateDirection = params.change15m >= 0 ? 'LONG' : 'SHORT';
+  const fallbackDir: MoonScannerDirection = params.change15m >= 0 ? 'LONG' : 'SHORT';
   const invalidationPrice = fallbackDir === 'LONG'
     ? (params.low24h > 0 ? Math.min(params.low24h, params.markPrice * 0.96) : params.markPrice * 0.95)
     : (params.high24h > 0 ? Math.max(params.high24h, params.markPrice * 1.04) : params.markPrice * 1.05);
@@ -224,7 +224,7 @@ function getOrLockDirection(params: {
 // ============================================================================
 export interface ActiveValidSignalRecord {
   symbol: string;
-  direction: SyndicateDirection;
+  direction: MoonScannerDirection;
   entryPrice: number;
   slPrice: number;
   slPercent: number;
@@ -412,7 +412,7 @@ export function purgeStaleEngineState(): void {
   sweepWatchMap.clear();
   candleMetricsCache.clear();
   dispatchedInvalidations.clear();
-  console.log('[SyndicateEngine] 🧹 Flushed all in-memory active signals, sweep watches, and candle cache cleanly.');
+  console.log('[MoonEngine] 🧹 Flushed all in-memory active signals, sweep watches, and candle cache cleanly.');
 }
 
 // Automatically wipe corrupt in-memory state on deployment/startup
@@ -478,7 +478,7 @@ export function computeRiskAdaptiveLeverage(slPercent: number): {
   }
 }
 
-async function fetch15mCandleMetrics(symbol: string, currentPrice: number, direction: SyndicateDirection): Promise<{
+async function fetch15mCandleMetrics(symbol: string, currentPrice: number, direction: MoonScannerDirection): Promise<{
   volMultiplier: number;
   change15m: number;
   change1h: number;
@@ -723,7 +723,7 @@ async function fetch15mCandleMetrics(symbol: string, currentPrice: number, direc
 // DUAL-MODE SMART ENTRY ENGINE: IMPULSE VS RETEST
 // ============================================================================
 function evaluateExecutionMode(params: {
-  direction: SyndicateDirection;
+  direction: MoonScannerDirection;
   markPrice: number;
   volMultiplier: number;
   takerBuyRatio: number;
@@ -735,9 +735,9 @@ function evaluateExecutionMode(params: {
   pivotShelf: number;
   swingBase?: number;
   recentBounce: boolean;
-  tier: SyndicateTier;
+  tier: MoonScannerTier;
 }): {
-  mode: SyndicateExecutionMode;
+  mode: MoonScannerExecutionMode;
   label: string;
   guidance: string;
   entryZone: string;
@@ -932,7 +932,7 @@ function evaluateExecutionMode(params: {
  * Evaluates candidate metrics and assigns Score, Tier, and Smart Entry Mode strictly matching
  * the 5-Layer Institutional Confluence Gate specification.
  */
-function evaluateSyndicateCandidate(params: {
+function evaluateMoonScannerCandidate(params: {
   symbol: string;
   markPrice: number;
   high24h: number;
@@ -958,7 +958,7 @@ function evaluateSyndicateCandidate(params: {
   lowestRecentLow?: number;
   isAbsorptionWick?: boolean;
   btcMacro: BtcMacroStatus;
-}): SyndicateCandidate {
+}): MoonScannerCandidate {
   const {
     symbol,
     markPrice,
@@ -1026,7 +1026,7 @@ function evaluateSyndicateCandidate(params: {
           priorPeakScore: existingActiveValid.peakScore,
           entryPrice: existingActiveValid.entryPrice
         });
-        console.log(`[SyndicateEngine] #${cleanSym} breached Invalidation Floor ($${existingActiveValid.slPrice}) -> Armed SWEEP_WATCH (Liquidity Hunt & SFP Spring Watch active)`);
+        console.log(`[MoonEngine] #${cleanSym} breached Invalidation Floor ($${existingActiveValid.slPrice}) -> Armed SWEEP_WATCH (Liquidity Hunt & SFP Spring Watch active)`);
       }
       // Immediately purge the coin from active tracking
       activeValidSignalsMap.delete(cleanSym);
@@ -1035,18 +1035,18 @@ function evaluateSyndicateCandidate(params: {
       if (!dispatchedInvalidations.has(cleanSym)) {
         dispatchedInvalidations.add(cleanSym);
         import('./telegramService').then(srv => {
-          srv.dispatchSyndicateInvalidationAlert({
+          srv.dispatchMoonScannerInvalidationAlert({
             symbol: cleanSym,
             slPrice: existingActiveValid.slPrice
           });
         }).catch(() => {});
-        console.log(`[SyndicateEngine] #${cleanSym} breached Invalidation Floor ($${existingActiveValid.slPrice}). Trade setup closed (One-Shot Alert Dispatched).`);
+        console.log(`[MoonEngine] #${cleanSym} breached Invalidation Floor ($${existingActiveValid.slPrice}). Trade setup closed (One-Shot Alert Dispatched).`);
       } else {
-        console.log(`[SyndicateEngine] #${cleanSym} breached Invalidation Floor ($${existingActiveValid.slPrice}), duplicate notification suppressed.`);
+        console.log(`[MoonEngine] #${cleanSym} breached Invalidation Floor ($${existingActiveValid.slPrice}), duplicate notification suppressed.`);
       }
     } else if (isExpired) {
       activeValidSignalsMap.delete(cleanSym);
-      console.log(`[SyndicateEngine] #${cleanSym} expired after 2h max lifespan.`);
+      console.log(`[MoonEngine] #${cleanSym} expired after 2h max lifespan.`);
     } else {
       // Asset is within 2h lifespan and holding above SL floor: STRICT RETENTION!
       isStickyValid = true;
@@ -1089,12 +1089,12 @@ function evaluateSyndicateCandidate(params: {
 
       symbolDirectionLockMap.delete(cleanSym);
       sweepWatchMap.delete(cleanSym);
-      console.log(`[SyndicateEngine] 🔥 SFP RECLAIM TRIGGERED for #${cleanSym}! Swept Floor: $${sweepWatch.originalSlPrice}, Lowest Sweep: $${sfpSweepLow}, Reclaimed: $${markPrice}, New SL: $${sfpSlPrice} (-${sfpSlPercent}%)`);
+      console.log(`[MoonEngine] 🔥 SFP RECLAIM TRIGGERED for #${cleanSym}! Swept Floor: $${sweepWatch.originalSlPrice}, Lowest Sweep: $${sfpSweepLow}, Reclaimed: $${markPrice}, New SL: $${sfpSlPrice} (-${sfpSlPercent}%)`);
     }
   }
 
   // Multi-Timeframe Trend Dominance Direction
-  const finalDirection: SyndicateDirection = isSfpReclaim
+  const finalDirection: MoonScannerDirection = isSfpReclaim
     ? 'LONG'
     : isStickyValid && existingActiveValid
     ? existingActiveValid.direction
@@ -1224,7 +1224,7 @@ function evaluateSyndicateCandidate(params: {
     takerSellRatio >= 52.0;
 
   let score = 50;
-  let tier: SyndicateTier = 'OBSERVE';
+  let tier: MoonScannerTier = 'OBSERVE';
 
   if (isSfpReclaim && !isRiskExceeded) {
     // 🔥 INSTITUTIONAL SFP RECLAIM (WYCKOFF SPRING): Top conviction alpha
@@ -1424,7 +1424,7 @@ function evaluateSyndicateCandidate(params: {
         triggeredAt: now,
         status: 'VALID'
       });
-      console.log(`[SyndicateEngine] Registered Sticky VALID Signal Latch for #${cleanSym} (${finalDirection}) at $${markPrice}, SL: $${effectiveSlPrice} (-${effectiveSlPercent}%) [${effectiveLeverageBadge}]`);
+      console.log(`[MoonEngine] Registered Sticky VALID Signal Latch for #${cleanSym} (${finalDirection}) at $${markPrice}, SL: $${effectiveSlPrice} (-${effectiveSlPercent}%) [${effectiveLeverageBadge}]`);
     } else {
       existing.peakScore = Math.max(existing.peakScore, score);
       existing.target1 = target1;
@@ -1454,7 +1454,7 @@ function evaluateSyndicateCandidate(params: {
   }
 
   // Execution Mode Calculation: DYNAMIC PULLBACK DIP GUIDANCE & SFP RECLAIM
-  let executionMode: SyndicateExecutionMode;
+  let executionMode: MoonScannerExecutionMode;
   let executionLabel: string;
   let executionGuidance: string;
   let entryZone: string;
@@ -1586,10 +1586,10 @@ function evaluateSyndicateCandidate(params: {
  * 3. Tertiary tie-breaker: Descending by Whale OI Surge & 1h Momentum
  * Result: Card #1 is ALWAYS the market's single most explosive whale-backed runner!
  */
-export function sortSyndicateCandidates(list: SyndicateCandidate[]): SyndicateCandidate[] {
+export function sortMoonScannerCandidates(list: MoonScannerCandidate[]): MoonScannerCandidate[] {
   return [...list].sort((a, b) => {
     // 1. Primary: Tier
-    const tierScore = (t: SyndicateTier) => (t === 'VALID' ? 3 : t === 'CONFLUENCE' ? 2 : 1);
+    const tierScore = (t: MoonScannerTier) => (t === 'VALID' ? 3 : t === 'CONFLUENCE' ? 2 : 1);
     const tierDiff = tierScore(b.tier) - tierScore(a.tier);
     if (tierDiff !== 0) return tierDiff;
 
@@ -1607,9 +1607,9 @@ export function sortSyndicateCandidates(list: SyndicateCandidate[]): SyndicateCa
 /**
  * Universal Real-Time Coin Inspector:
  * Inspects ANY Binance USDT-M Perpetual pair on-demand in real-time,
- * evaluates orderflow, CVD, OI, and returns complete Syndicate Candidate!
+ * evaluates orderflow, CVD, OI, and returns complete MoonScanner Candidate!
  */
-export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCandidate | null> {
+export async function inspectSinglePair(rawSymbol: string): Promise<MoonScannerCandidate | null> {
   const clean = rawSymbol.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
   if (!clean) return null;
   const symCandidates = [
@@ -1642,14 +1642,14 @@ export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCan
       const change24h = parseFloat(t.priceChangePercent) || 0;
       const quoteVol = parseFloat(t.quoteVolume) || 0;
 
-      const approxDirection: SyndicateDirection = change24h >= 0 ? 'LONG' : 'SHORT';
+      const approxDirection: MoonScannerDirection = change24h >= 0 ? 'LONG' : 'SHORT';
 
       const [metrics, oiDeltaPct] = await Promise.all([
         fetch15mCandleMetrics(sym, markPrice, approxDirection),
         fetchOpenInterestDelta(sym)
       ]);
 
-      const candidate = evaluateSyndicateCandidate({
+      const candidate = evaluateMoonScannerCandidate({
         symbol: sym,
         markPrice,
         high24h,
@@ -1677,13 +1677,13 @@ export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCan
       });
 
       // Merge or update in global memory
-      const existingIdx = cachedSyndicateCandidates.findIndex(c => c.symbol === sym);
+      const existingIdx = cachedMoonScannerCandidates.findIndex(c => c.symbol === sym);
       if (existingIdx >= 0) {
-        cachedSyndicateCandidates[existingIdx] = candidate;
+        cachedMoonScannerCandidates[existingIdx] = candidate;
       } else {
-        cachedSyndicateCandidates.unshift(candidate);
+        cachedMoonScannerCandidates.unshift(candidate);
       }
-      cachedSyndicateCandidates = sortSyndicateCandidates(cachedSyndicateCandidates);
+      cachedMoonScannerCandidates = sortMoonScannerCandidates(cachedMoonScannerCandidates);
 
       return candidate;
     } catch {
@@ -1697,9 +1697,9 @@ export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCan
 /**
  * Runs a complete market scan across Binance Futures USDT-M Perpetuals
  */
-export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
+export async function runMoonScannerScan(): Promise<MoonScannerCandidate[]> {
   if (isScanInProgress) {
-    return cachedSyndicateCandidates;
+    return cachedMoonScannerCandidates;
   }
 
   isScanInProgress = true;
@@ -1755,7 +1755,7 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
     // Limit active scan pool to top 60 pairs for instant sub-second refresh
     const scanPool = validTickers;
 
-    const evaluatedCandidates: SyndicateCandidate[] = [];
+    const evaluatedCandidates: MoonScannerCandidate[] = [];
     const batchSize = 10;
 
     for (let i = 0; i < scanPool.length; i += batchSize) {
@@ -1772,7 +1772,7 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
           const fundingFeePct = fundInfo?.fundingFeePct ?? 0.01;
 
           // Tentative direction to guide candle SL search
-          const approxDirection: SyndicateDirection = change24h >= 0 ? 'LONG' : 'SHORT';
+          const approxDirection: MoonScannerDirection = change24h >= 0 ? 'LONG' : 'SHORT';
 
           // Parallel fetch: 15M candle metrics (Vol, Taker CVD, SL, Bounces) + Open Interest Delta
           const [metrics, oiDeltaPct] = await Promise.all([
@@ -1780,7 +1780,7 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
             fetchOpenInterestDelta(sym)
           ]);
 
-          return evaluateSyndicateCandidate({
+          return evaluateMoonScannerCandidate({
             symbol: sym,
             markPrice,
             high24h,
@@ -1814,19 +1814,19 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
     }
 
     // Dynamic strength-based card sorting
-    const sorted = sortSyndicateCandidates(evaluatedCandidates);
+    const sorted = sortMoonScannerCandidates(evaluatedCandidates);
 
-    cachedSyndicateCandidates = sorted;
+    cachedMoonScannerCandidates = sorted;
     lastScanTimestamp = Date.now();
     scanDurationMs = Date.now() - startTime;
 
     // Check for VALID candidates eligible for Telegram dispatch
-    await checkAndDispatchSyndicateAlerts(sorted);
+    await checkAndDispatchMoonScannerAlerts(sorted);
 
     return sorted;
   } catch (err: any) {
-    console.error('[SyndicateEngine] Scan error:', err?.message || err);
-    return cachedSyndicateCandidates;
+    console.error('[MoonEngine] Scan error:', err?.message || err);
+    return cachedMoonScannerCandidates;
   } finally {
     isScanInProgress = false;
   }
@@ -1838,7 +1838,7 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
  * Strictly enforces 5.0% SL risk ceiling and 3 baseline validation gates.
  * Respects BTC dump shield for LONGs, dispatches high-conviction SHORTs.
  */
-async function checkAndDispatchSyndicateAlerts(candidates: SyndicateCandidate[]): Promise<void> {
+async function checkAndDispatchMoonScannerAlerts(candidates: MoonScannerCandidate[]): Promise<void> {
   const validCandidates = candidates.filter(
     c => c.tier === 'VALID' &&
       c.score >= 85 &&
@@ -1862,28 +1862,28 @@ async function checkAndDispatchSyndicateAlerts(candidates: SyndicateCandidate[])
 
   // SFP Reclaims are prioritized as highest conviction institutional alpha
   const topAlpha = validCandidates.find(c => c.executionLabel?.includes('SFP RECLAIM')) || validCandidates[0];
-  if (!isSymbolInSyndicateTelegramCooldown(topAlpha.symbol)) {
+  if (!isSymbolInMoonScannerTelegramCooldown(topAlpha.symbol)) {
     try {
-      const { dispatchSyndicateTelegramAlert } = await import('./telegramService');
-      const res = await dispatchSyndicateTelegramAlert(topAlpha);
+      const { dispatchMoonScannerTelegramAlert } = await import('./telegramService');
+      const res = await dispatchMoonScannerTelegramAlert(topAlpha);
       if (res.success) {
-        markSymbolSyndicateDispatched(topAlpha.symbol);
-        console.log(`[SyndicateEngine] Dispatched VALID ${topAlpha.direction} alert for #${topAlpha.symbol} (${topAlpha.executionLabel || topAlpha.executionMode}) - Score: ${topAlpha.score}, SL: ${topAlpha.slPercent}%`);
+        markSymbolMoonScannerDispatched(topAlpha.symbol);
+        console.log(`[MoonEngine] Dispatched VALID ${topAlpha.direction} alert for #${topAlpha.symbol} (${topAlpha.executionLabel || topAlpha.executionMode}) - Score: ${topAlpha.score}, SL: ${topAlpha.slPercent}%`);
       }
     } catch (e: any) {
-      console.warn('[SyndicateEngine] Telegram dispatch error:', e?.message || e);
+      console.warn('[MoonEngine] Telegram dispatch error:', e?.message || e);
     }
   }
 }
 
-export function getSyndicateCandidates(): SyndicateCandidate[] {
-  return cachedSyndicateCandidates;
+export function getMoonScannerCandidates(): MoonScannerCandidate[] {
+  return cachedMoonScannerCandidates;
 }
 
-export function getSyndicateTelemetry(): SyndicateEngineTelemetry {
-  const total = cachedSyndicateCandidates.length;
-  const valid = cachedSyndicateCandidates.filter(c => c.tier === 'VALID').length;
-  const confluence = cachedSyndicateCandidates.filter(c => c.tier === 'CONFLUENCE').length;
+export function getMoonScannerTelemetry(): MoonEngineTelemetry {
+  const total = cachedMoonScannerCandidates.length;
+  const valid = cachedMoonScannerCandidates.filter(c => c.tier === 'VALID').length;
+  const confluence = cachedMoonScannerCandidates.filter(c => c.tier === 'CONFLUENCE').length;
   const observe = total - valid - confluence;
 
   return {
@@ -1902,21 +1902,21 @@ export function getSyndicateTelemetry(): SyndicateEngineTelemetry {
 
 let scanIntervalHandle: NodeJS.Timeout | null = null;
 
-export function startSyndicateScanner(): void {
+export function startMoonScannerScanner(): void {
   if (scanIntervalHandle) return;
 
   // Flush stale state on initialization
   purgeStaleEngineState();
 
-  console.log('[SyndicateEngine] Starting continuous institutional Syndicate Analyst scanner (Dual-Mode Smart Entry + Confluence)...');
-  runSyndicateScan().catch(() => {});
+  console.log('[MoonEngine] Starting continuous institutional MoonScanner Pro scanner (Dual-Mode Smart Entry + Confluence)...');
+  runMoonScannerScan().catch(() => {});
 
   scanIntervalHandle = setInterval(() => {
-    runSyndicateScan().catch(() => {});
+    runMoonScannerScan().catch(() => {});
   }, 65000);
 }
 
-export function stopSyndicateScanner(): void {
+export function stopMoonScannerScanner(): void {
   if (scanIntervalHandle) {
     clearInterval(scanIntervalHandle);
     scanIntervalHandle = null;

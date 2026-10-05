@@ -21,14 +21,14 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
-import { SyndicateCard, SyndicateCandidate, SyndicateTier, SyndicateDirection } from '../components/SyndicateCard';
+import { MoonScannerCard, MoonScannerCandidate, MoonScannerTier, MoonScannerDirection } from '../components/MoonScannerCard';
 import { NotificationService } from '../services/notificationService';
 import { usePWAInstall } from '../utils/usePWAInstall';
 import { getApiBase } from '../services/api';
 
-export type { SyndicateCandidate, SyndicateTier, SyndicateDirection };
+export type { MoonScannerCandidate, MoonScannerTier, MoonScannerDirection };
 
-interface SyndicateTelemetry {
+interface MoonScannerTelemetry {
   lastScanTimestamp: number;
   lastScanFormatted: string;
   totalMonitored: number;
@@ -41,13 +41,13 @@ interface SyndicateTelemetry {
   btcRsi15m?: number;
 }
 
-export const SyndicateAnalystPage: React.FC = () => {
-  const [candidates, setCandidates] = useState<SyndicateCandidate[]>([]);
-  const [telemetry, setTelemetry] = useState<SyndicateTelemetry | null>(null);
+export const MoonScannerAnalystPage: React.FC = () => {
+  const [candidates, setCandidates] = useState<MoonScannerCandidate[]>([]);
+  const [telemetry, setTelemetry] = useState<MoonScannerTelemetry | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [selectedTier, setSelectedTier] = useState<'ALL' | SyndicateTier>('ALL');
-  const [selectedDirection, setSelectedDirection] = useState<'ALL' | SyndicateDirection>('ALL');
+  const [selectedTier, setSelectedTier] = useState<'ALL' | MoonScannerTier>('ALL');
+  const [selectedDirection, setSelectedDirection] = useState<'ALL' | MoonScannerDirection>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSearchingOnline, setIsSearchingOnline] = useState<boolean>(false);
   const [alertsEnabled, setAlertsEnabled] = useState<boolean>(() => NotificationService.isAlertsEnabled());
@@ -72,7 +72,7 @@ export const SyndicateAnalystPage: React.FC = () => {
   const inFlightRef = useRef<boolean>(false);
 
   // Resilient Fetch with in-flight deduplication and timeout protection
-  const fetchSyndicateData = useCallback(async (isManual: boolean = false) => {
+  const fetchMoonScannerData = useCallback(async (isManual: boolean = false) => {
     // Prevent overlapping simultaneous requests
     if (inFlightRef.current && !isManual) return;
     inFlightRef.current = true;
@@ -81,7 +81,7 @@ export const SyndicateAnalystPage: React.FC = () => {
 
     try {
       const apiBase = getApiBase();
-      const res = await fetch(`${apiBase}/syndicate`, {
+      const res = await fetch(`${apiBase}/moonscanner`, {
         signal: AbortSignal.timeout(9000),
         headers: { Accept: 'application/json' }
       });
@@ -100,12 +100,12 @@ export const SyndicateAnalystPage: React.FC = () => {
         }
       } else {
         // Non-fatal status (e.g. 503 while warming up)
-        console.warn(`[SyndicateAnalyst] Feed syncing HTTP ${res.status}`);
+        console.warn(`[MoonScannerAnalyst] Feed syncing HTTP ${res.status}`);
       }
     } catch (err: any) {
       // Gracefully handle aborts or transient network glitches without raising console.error
       if (err?.name !== 'AbortError') {
-        console.warn('[SyndicateAnalyst] Feed syncing:', err?.message || err);
+        console.warn('[MoonScannerAnalyst] Feed syncing:', err?.message || err);
       }
       if (typeof navigator !== 'undefined' && !navigator.onLine && isMountedRef.current) {
         setIsOffline(true);
@@ -122,7 +122,7 @@ export const SyndicateAnalystPage: React.FC = () => {
   // Polling lifecycle with visibility and online awareness
   useEffect(() => {
     isMountedRef.current = true;
-    fetchSyndicateData();
+    fetchMoonScannerData();
 
     // Continuous 4-second real-time streaming poll (paused when tab hidden to prevent socket drops)
     const interval = setInterval(() => {
@@ -132,18 +132,18 @@ export const SyndicateAnalystPage: React.FC = () => {
       if (typeof navigator !== 'undefined' && !navigator.onLine) {
         return;
       }
-      fetchSyndicateData();
+      fetchMoonScannerData();
     }, 4000);
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        fetchSyndicateData();
+        fetchMoonScannerData();
       }
     };
 
     const handleOnline = () => {
       setIsOffline(false);
-      fetchSyndicateData();
+      fetchMoonScannerData();
     };
 
     const handleOffline = () => {
@@ -161,7 +161,7 @@ export const SyndicateAnalystPage: React.FC = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [fetchSyndicateData]);
+  }, [fetchMoonScannerData]);
 
   // Universal Real-Time Coin Inspector: inspects any Binance Futures pair
   const inspectCoinOnline = async (query: string) => {
@@ -171,7 +171,7 @@ export const SyndicateAnalystPage: React.FC = () => {
     setIsSearchingOnline(true);
     try {
       const apiBase = getApiBase();
-      const res = await fetch(`${apiBase}/syndicate/inspect?symbol=${encodeURIComponent(clean)}`, {
+      const res = await fetch(`${apiBase}/moonscanner/inspect?symbol=${encodeURIComponent(clean)}`, {
         signal: AbortSignal.timeout(8000)
       });
       if (res.ok) {
@@ -185,7 +185,7 @@ export const SyndicateAnalystPage: React.FC = () => {
         }
       }
     } catch (e: any) {
-      console.warn('[SyndicateAnalyst] Search inspection notice:', e?.message || e);
+      console.warn('[MoonScannerAnalyst] Search inspection notice:', e?.message || e);
     } finally {
       if (isMountedRef.current) {
         setIsSearchingOnline(false);
@@ -224,7 +224,7 @@ export const SyndicateAnalystPage: React.FC = () => {
     setRefreshing(true);
     try {
       const apiBase = getApiBase();
-      const res = await fetch(`${apiBase}/syndicate/scan`, {
+      const res = await fetch(`${apiBase}/moonscanner/scan`, {
         method: 'POST',
         signal: AbortSignal.timeout(12000)
       });
@@ -241,7 +241,7 @@ export const SyndicateAnalystPage: React.FC = () => {
         }
       }
     } catch (e: any) {
-      console.warn('[SyndicateAnalyst] Manual scan notice:', e?.message || e);
+      console.warn('[MoonScannerAnalyst] Manual scan notice:', e?.message || e);
     } finally {
       if (isMountedRef.current) {
         setRefreshing(false);
@@ -263,7 +263,7 @@ export const SyndicateAnalystPage: React.FC = () => {
     setTestingTelegram(true);
     try {
       const apiBase = getApiBase();
-      const res = await fetch(`${apiBase}/syndicate/test-telegram`, {
+      const res = await fetch(`${apiBase}/moonscanner/test-telegram`, {
         method: 'POST',
         signal: AbortSignal.timeout(10000)
       });
@@ -303,7 +303,7 @@ export const SyndicateAnalystPage: React.FC = () => {
     });
 
     return [...filtered].sort((a, b) => {
-      const tierRank = (t: SyndicateTier) => (t === 'VALID' ? 3 : t === 'CONFLUENCE' ? 2 : 1);
+      const tierRank = (t: MoonScannerTier) => (t === 'VALID' ? 3 : t === 'CONFLUENCE' ? 2 : 1);
       const tierDiff = tierRank(b.tier) - tierRank(a.tier);
       if (tierDiff !== 0) return tierDiff;
 
@@ -341,7 +341,7 @@ export const SyndicateAnalystPage: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg sm:text-xl font-black text-white tracking-tight">
-                  Syndicate Analyst
+                  MoonScanner Pro
                 </h1>
                 <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-extrabold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                   Whale Radar
@@ -591,7 +591,7 @@ export const SyndicateAnalystPage: React.FC = () => {
         ) : sortedAndFilteredCandidates.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {sortedAndFilteredCandidates.map(candidate => (
-              <SyndicateCard key={candidate.id} candidate={candidate} />
+              <MoonScannerCard key={candidate.id} candidate={candidate} />
             ))}
           </div>
         ) : (

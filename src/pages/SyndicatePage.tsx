@@ -13,9 +13,9 @@ import {
   BarChart2,
   CheckCircle2
 } from 'lucide-react';
-import { SyndicateCard, SyndicateCandidate, SyndicateTier, SyndicateDirection } from '../components/SyndicateCard';
+import { MoonScannerCard, MoonScannerCandidate, MoonScannerTier, MoonScannerDirection } from '../components/MoonScannerCard';
 
-interface SyndicateTelemetry {
+interface MoonScannerTelemetry {
   lastScanTimestamp: number;
   lastScanFormatted: string;
   totalMonitored: number;
@@ -26,24 +26,24 @@ interface SyndicateTelemetry {
   isScanning: boolean;
 }
 
-export const SyndicatePage: React.FC = () => {
-  const [candidates, setCandidates] = useState<SyndicateCandidate[]>([]);
-  const [telemetry, setTelemetry] = useState<SyndicateTelemetry | null>(null);
+export const MoonScannerPage: React.FC = () => {
+  const [candidates, setCandidates] = useState<MoonScannerCandidate[]>([]);
+  const [telemetry, setTelemetry] = useState<MoonScannerTelemetry | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [testAlertSending, setTestAlertSending] = useState<boolean>(false);
   const [alertFeedback, setAlertFeedback] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // Filters
-  const [selectedTier, setSelectedTier] = useState<'ALL' | SyndicateTier>('ALL');
-  const [selectedDirection, setSelectedDirection] = useState<'ALL' | SyndicateDirection>('ALL');
+  const [selectedTier, setSelectedTier] = useState<'ALL' | MoonScannerTier>('ALL');
+  const [selectedDirection, setSelectedDirection] = useState<'ALL' | MoonScannerDirection>('ALL');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Fetch Syndicate intelligence
-  const fetchSyndicateData = async (isManual: boolean = false) => {
+  // Fetch MoonScanner intelligence
+  const fetchMoonScannerData = async (isManual: boolean = false) => {
     if (isManual) setRefreshing(true);
     try {
-      const res = await fetch('/api/syndicate');
+      const res = await fetch('/api/moonscanner');
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data.candidates)) {
@@ -54,7 +54,7 @@ export const SyndicatePage: React.FC = () => {
         }
       }
     } catch (err) {
-      console.error('[SyndicatePage] Fetch error:', err);
+      console.error('[MoonScannerPage] Fetch error:', err);
     } finally {
       setLoading(false);
       if (isManual) setRefreshing(false);
@@ -63,9 +63,9 @@ export const SyndicatePage: React.FC = () => {
 
   // Immediate fetch and continuous 3-second polling
   useEffect(() => {
-    fetchSyndicateData();
+    fetchMoonScannerData();
     const interval = setInterval(() => {
-      fetchSyndicateData();
+      fetchMoonScannerData();
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -74,7 +74,7 @@ export const SyndicatePage: React.FC = () => {
   const handleManualScan = async () => {
     setRefreshing(true);
     try {
-      const res = await fetch('/api/syndicate/scan', { method: 'POST' });
+      const res = await fetch('/api/moonscanner/scan', { method: 'POST' });
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data.candidates)) {
@@ -85,7 +85,7 @@ export const SyndicatePage: React.FC = () => {
         }
       }
     } catch (e) {
-      console.error('[SyndicatePage] Manual scan error:', e);
+      console.error('[MoonScannerPage] Manual scan error:', e);
     } finally {
       setRefreshing(false);
     }
@@ -96,7 +96,7 @@ export const SyndicatePage: React.FC = () => {
     setTestAlertSending(true);
     setAlertFeedback(null);
     try {
-      const res = await fetch('/api/syndicate/test-alert', { method: 'POST' });
+      const res = await fetch('/api/moonscanner/test-alert', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
         setAlertFeedback({
@@ -148,7 +148,7 @@ export const SyndicatePage: React.FC = () => {
               <Zap className="w-5 h-5 fill-emerald-400/30" />
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              SYNDICATE ANALYST
+              MoonScanner Pro
             </h1>
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
               Whale Orderflow
@@ -417,7 +417,7 @@ export const SyndicatePage: React.FC = () => {
       ) : filteredCandidates.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {filteredCandidates.map(candidate => (
-            <SyndicateCard
+            <MoonScannerCard
               key={candidate.id}
               candidate={candidate}
               onSelect={(cand) => window.open(cand.binanceUrl, '_blank', 'noopener,noreferrer')}
