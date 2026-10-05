@@ -1753,7 +1753,7 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
     });
 
     // Limit active scan pool to top 60 pairs for instant sub-second refresh
-    const scanPool = validTickers.slice(0, 60);
+    const scanPool = validTickers;
 
     const evaluatedCandidates: SyndicateCandidate[] = [];
     const batchSize = 10;
