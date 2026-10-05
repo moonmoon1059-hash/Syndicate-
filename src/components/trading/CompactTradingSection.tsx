@@ -537,7 +537,7 @@ export const CompactTradingSection: React.FC = () => {
                 No active positions open. Execute qualified Top 5 setups below or enable Autonomous Trading.
               </div>
             ) : (
-              <div className="space-y-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5">
                 {summary.activePositions.map((pos) => {
                   const isLong = pos.direction === 'LONG';
                   const isProfit = pos.unrealizedPnL >= 0;
@@ -642,7 +642,7 @@ export const CompactTradingSection: React.FC = () => {
 
         {/* TAB 2: TOP 5 ACTIONABLE SETUPS */}
         {activeTab === 'TOP5' && (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="text-xs text-slate-400 flex items-center justify-between pb-1">
               <span>
                 Existing MoonScanner Core Intelligence Top 5 ranked signals evaluated by your isolated Risk Engine.
@@ -654,7 +654,7 @@ export const CompactTradingSection: React.FC = () => {
                 Scanning market for qualified Top 5 opportunities...
               </div>
             ) : (
-              <div className="space-y-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5">
                 {top5Actionable.map((sig) => {
                   const ev = sig.evaluation;
                   const canTrade = ev.canExecute;
@@ -760,7 +760,7 @@ export const CompactTradingSection: React.FC = () => {
                 No past trades recorded yet.
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {summary.recentTrades.map((t) => {
                   const isWon = t.realizedPnL > 0;
                   return (
@@ -811,7 +811,7 @@ export const CompactTradingSection: React.FC = () => {
                 No safety rejections recorded. All pre-flight checks and risk engine rules are healthy.
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {rejections.map((rej) => (
                   <div
                     key={rej.id}
@@ -846,7 +846,7 @@ export const CompactTradingSection: React.FC = () => {
                 No execution audit logs recorded yet. Every order placement, SL/TP modification, safety rejection, and emergency action is permanently recorded here.
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {executionAudits.map((audit) => {
                   const isSuccess = audit.executionStatus === 'CONFIRMED' || audit.executionStatus === 'SUBMITTED';
                   const isRejected = audit.executionStatus === 'REJECTED';
@@ -929,7 +929,7 @@ export const CompactTradingSection: React.FC = () => {
 
         {/* TAB 6: ADMIN APPROVALS & USER ACCESS */}
         {activeTab === 'ADMIN' && user.role === 'ADMIN' && (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {/* Header & Controls */}
             <div className="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-800">
               <div>
@@ -1014,7 +1014,7 @@ export const CompactTradingSection: React.FC = () => {
                   : 'No user accounts found in registry.'}
               </div>
             ) : (
-              <div className="space-y-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5">
                 {adminUsers.map((u) => (
                   <div
                     key={u.id}

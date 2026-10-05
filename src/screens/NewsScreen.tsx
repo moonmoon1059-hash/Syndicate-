@@ -91,7 +91,7 @@ export const NewsScreen: React.FC = () => {
   });
 
   return (
-    <div className="space-y-6 pb-24 max-w-6xl mx-auto px-2 sm:px-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-24 max-w-6xl mx-auto px-2 sm:px-4">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -157,7 +157,7 @@ export const NewsScreen: React.FC = () => {
 
       {/* VIEW A: VALIDATED NEWS SIGNALS */}
       {subTab === 'VALIDATED_SIGNALS' && (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {validatedNewsSignals.length === 0 ? (
             <div className="p-12 text-center bg-slate-900/30 rounded-3xl border border-slate-800/80">
               <Newspaper className="w-12 h-12 text-slate-600 mx-auto mb-3" />
@@ -292,7 +292,7 @@ export const NewsScreen: React.FC = () => {
       {subTab === 'FAST_FEED' && (
       <>
       {/* Filter & Search Bar */}
-      <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80 space-y-3 shadow-xl">
+      <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 shadow-xl">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[240px]">
             <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -360,7 +360,7 @@ export const NewsScreen: React.FC = () => {
       {filteredNews.length === 0 ? (
         <div className="p-12 text-center rounded-2xl bg-slate-900/40 border border-slate-800 text-slate-400 font-mono text-sm">
           {news.length === 0 ? (
-            <div className="space-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <AlertTriangle className="w-8 h-8 text-amber-400 mx-auto opacity-60" />
               <div className="font-bold text-slate-300">NEWS FEED UNAVAILABLE</div>
               <div className="text-xs text-slate-500">Live intelligence pipeline is polling for incoming network events.</div>

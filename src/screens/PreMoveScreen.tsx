@@ -167,7 +167,7 @@ export const PreMoveScreen: React.FC = () => {
   }, [preMoveCandidates, filterDirection, filterStatus, searchQuery]);
 
   return (
-    <div className="space-y-6 pb-24 max-w-7xl mx-auto px-2 sm:px-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-24 max-w-7xl mx-auto px-2 sm:px-4">
       {/* Header Banner */}
       <div className="flex flex-wrap items-center justify-between gap-4 bg-slate-900/60 p-5 rounded-3xl border border-slate-800/80 backdrop-blur-md">
         <div>
@@ -485,7 +485,7 @@ export const PreMoveScreen: React.FC = () => {
                 </div>
 
                 {/* Detailed Radar Evidence Grid (RVOL, OI, Structure, Liquidity, Volatility, MTF) */}
-                <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 text-xs space-y-2">
+                <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 text-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   <div className="flex items-center justify-between text-[11px] font-mono">
                     <span className="font-bold text-slate-200">Radar Telemetry & Conditions:</span>
                     <span className="text-[10px] text-amber-400 font-mono font-bold">

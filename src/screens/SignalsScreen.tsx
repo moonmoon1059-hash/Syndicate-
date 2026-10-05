@@ -109,7 +109,7 @@ export const SignalsScreen: React.FC = () => {
   const eliteCount = useMemo(() => filterEliteSignals(signals).length, [signals]);
 
   return (
-    <div className="space-y-5 pb-24 max-w-5xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-24 max-w-5xl mx-auto">
       {/* Dashboard Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -180,7 +180,7 @@ export const SignalsScreen: React.FC = () => {
       </div>
 
       {/* Filter Control Center */}
-      <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 space-y-3 font-mono">
+      <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 font-mono">
         {/* Search Bar & Direction Filters */}
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[200px]">
@@ -324,7 +324,7 @@ export const SignalsScreen: React.FC = () => {
       {/* Signal Grid or Empty / Wait State */}
       {displayedSignals.length === 0 ? (
         viewMode === 'ELITE' ? (
-          <div className="p-12 text-center rounded-2xl bg-amber-950/20 border border-amber-500/30 text-amber-300/90 font-mono space-y-3">
+          <div className="p-12 text-center rounded-2xl bg-amber-950/20 border border-amber-500/30 text-amber-300/90 font-mono grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400">
               <ShieldCheck className="w-6 h-6" />
             </div>
@@ -354,7 +354,7 @@ export const SignalsScreen: React.FC = () => {
           </div>
         )
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {displayedSignals.slice(0, visibleLimit).map((sig) => (
               <SignalCard

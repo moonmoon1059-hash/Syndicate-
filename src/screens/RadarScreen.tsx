@@ -140,7 +140,7 @@ export const RadarScreen: React.FC = () => {
   };
 
   return (
-    <div className="space-y-5 pb-24 max-w-5xl mx-auto px-2 sm:px-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-24 max-w-5xl mx-auto px-2 sm:px-4">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
@@ -264,7 +264,7 @@ export const RadarScreen: React.FC = () => {
 
       {/* Tab 2: New Listing Intelligence Radar */}
       {activeTab === 'NEW_LISTINGS' && (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {/* Rules & Protocol Banner */}
           <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 text-xs font-mono text-slate-300 flex items-start gap-3">
             <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
@@ -379,7 +379,7 @@ export const RadarScreen: React.FC = () => {
 
           {/* Loading State */}
           {loadingListings && listings.length === 0 && (
-            <div className="p-16 text-center text-xs font-mono text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800 space-y-3">
+            <div className="p-16 text-center text-xs font-mono text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <RefreshCw className="w-7 h-7 animate-spin mx-auto text-cyan-400" />
               <div className="text-slate-300 font-bold">Scanning Binance & Bybit listing feeds...</div>
               <div className="text-slate-500 text-[11px]">Connecting to official exchange registries & announcement channels</div>
@@ -388,7 +388,7 @@ export const RadarScreen: React.FC = () => {
 
           {/* Error State */}
           {listingError && listings.length === 0 && (
-            <div className="p-8 text-center text-xs font-mono text-rose-300 bg-rose-950/30 rounded-2xl border border-rose-800/80 space-y-3">
+            <div className="p-8 text-center text-xs font-mono text-rose-300 bg-rose-950/30 rounded-2xl border border-rose-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <AlertTriangle className="w-6 h-6 mx-auto text-rose-400" />
               <div>Error fetching listing radar: {listingError}</div>
               <button
@@ -403,7 +403,7 @@ export const RadarScreen: React.FC = () => {
 
           {/* Empty State */}
           {!loadingListings && displayedListings.length === 0 && !listingError && (
-            <div className="p-12 text-center text-xs font-mono text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800 space-y-2">
+            <div className="p-12 text-center text-xs font-mono text-slate-400 bg-slate-900/40 rounded-2xl border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <Clock className="w-8 h-8 mx-auto text-slate-600 mb-1" />
               <div className="text-slate-300 font-bold">
                 {listingSubTab === 'UPCOMING'
@@ -464,7 +464,7 @@ export const RadarScreen: React.FC = () => {
 
                       {/* Scheduled Time & Live Countdown for Upcoming */}
                       {isUpcomingNow && schedTime && (
-                        <div className="mt-2.5 p-2.5 rounded-xl bg-amber-950/30 border border-amber-800/50 flex flex-col gap-2 text-xs font-mono">
+                        <div className="mt-2.5 p-2.5 rounded-xl bg-amber-950/30 border border-amber-800/50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-xs font-mono">
                           <div className="flex items-center justify-between">
                             <div>
                               <span className="text-[10px] text-amber-400 block font-semibold">Scheduled Listing:</span>
@@ -603,7 +603,7 @@ export const RadarScreen: React.FC = () => {
 
                       {/* Structural Trade Setup (ONLY when verified base supports it, never fabricated) */}
                       {!isUpcomingNow && item.decision && item.decision !== 'WAIT' && item.entryZone ? (
-                        <div className="mt-3 p-3 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2 text-xs font-mono">
+                        <div className="mt-3 p-3 rounded-xl bg-slate-950/90 border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-xs font-mono">
                           <div className="flex items-center justify-between">
                             <span className="flex items-center gap-1.5 font-bold text-emerald-400">
                               <Zap className="w-3.5 h-3.5" />

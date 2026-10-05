@@ -233,7 +233,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
   const latestNews = useMemo(() => news.slice(0, 2), [news]);
 
   return (
-    <div className="space-y-5 pb-24 max-w-5xl mx-auto px-1 sm:px-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pb-24 max-w-5xl mx-auto px-1 sm:px-0">
       {/* 1. Command Center Live Header */}
       <div className="bg-slate-900/80 rounded-2xl border border-slate-800/90 p-4 shadow-xl backdrop-blur-md">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -429,7 +429,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
       <CompactTradingSection />
 
       {/* 4. Best Opportunities Stream (>= 30% Potential Move, Hard-capped at 5) */}
-      <div className="space-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
@@ -460,7 +460,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
         </div>
 
         {highOpportunitySignals.length === 0 ? (
-          <div className="p-8 text-center rounded-2xl bg-slate-900/60 border border-slate-800 font-mono space-y-3">
+          <div className="p-8 text-center rounded-2xl bg-slate-900/60 border border-slate-800 font-mono grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="w-10 h-10 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mx-auto text-cyan-400">
               <ShieldCheck className="w-5 h-5" />
             </div>
@@ -542,7 +542,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
       {/* 6. Market Pulse: Radar & Catalyst Snippets */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
         {/* Radar Snippet */}
-        <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2.5">
+        <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Compass className="w-4 h-4 text-blue-400" />
@@ -558,7 +558,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {hotRadar.map((item) => (
               <div
                 key={item.symbol}
@@ -580,7 +580,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
         </div>
 
         {/* Breaking News Catalyst Snippet */}
-        <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2.5">
+        <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Newspaper className="w-4 h-4 text-emerald-400" />
@@ -596,7 +596,7 @@ export const HomeScreen: React.FC<Props> = ({ onNavigateTab }) => {
             </button>
           </div>
 
-          <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {latestNews.map((n) => (
               <div
                 key={n.id}

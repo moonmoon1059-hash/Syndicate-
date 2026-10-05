@@ -31,7 +31,7 @@ export const NewsModal: React.FC<Props> = ({ news, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 rounded-lg bg-slate-800/80 text-slate-400 hover:text-slate-100 transition-colors"
@@ -174,7 +174,7 @@ export const NewsModal: React.FC<Props> = ({ news, onClose }) => {
 
         {/* Pre-Pump Catalyst Setup Intelligence */}
         {news.prePumpSetup?.isPrePumpCatalyst && (
-          <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-xs font-mono text-emerald-300 space-y-2">
+          <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-xs font-mono text-emerald-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="flex items-center justify-between font-bold">
               <span className="flex items-center gap-1.5 text-sm">
                 <Zap className="w-4 h-4 text-emerald-400 animate-pulse" />
@@ -201,7 +201,7 @@ export const NewsModal: React.FC<Props> = ({ news, onClose }) => {
 
         {/* Post-Pump Exhaustion / Dump Risk Intelligence */}
         {news.exhaustionDumpRisk && (news.exhaustionDumpRisk.status === 'PUMP_EXHAUSTION' || news.exhaustionDumpRisk.status === 'DUMP_RISK') && (
-          <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/30 text-xs font-mono text-rose-300 space-y-2">
+          <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/30 text-xs font-mono text-rose-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="flex items-center justify-between font-bold">
               <span className="flex items-center gap-1.5 text-sm">
                 <AlertTriangle className="w-4 h-4 text-rose-400" />
@@ -229,7 +229,7 @@ export const NewsModal: React.FC<Props> = ({ news, onClose }) => {
 
         {/* Phase 13: Reaction Windows (5m, 15m, 30m, 1h, 4h) */}
         {news.reactionWindows && (
-          <div className="p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl space-y-2">
+          <div className="p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <div className="flex items-center justify-between text-xs font-mono font-bold text-slate-300">
               <span className="flex items-center gap-1.5">
                 <Clock className="w-3.5 h-3.5 text-cyan-400" />

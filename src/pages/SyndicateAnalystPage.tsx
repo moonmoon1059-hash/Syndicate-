@@ -341,7 +341,7 @@ export const SyndicateAnalystPage: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg sm:text-xl font-black text-white tracking-tight">
-                  Syndicate Analyst
+                  MoonScanner Pro
                 </h1>
                 <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-extrabold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                   Whale Radar
@@ -571,7 +571,7 @@ export const SyndicateAnalystPage: React.FC = () => {
         {loading && candidates.length === 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {[1, 2, 3, 4, 5, 6].map(n => (
-              <div key={n} className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5 animate-pulse space-y-4">
+              <div key={n} className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5 animate-pulse grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <div className="flex justify-between items-center">
                   <div className="w-28 h-4 bg-slate-800 rounded" />
                   <div className="w-16 h-4 bg-slate-800 rounded" />
@@ -595,7 +595,7 @@ export const SyndicateAnalystPage: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="p-12 text-center rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3 max-w-md mx-auto my-12">
+          <div className="p-12 text-center rounded-2xl border border-slate-800 bg-slate-900/40 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-md mx-auto my-12">
             <Eye className="w-10 h-10 text-slate-500 mx-auto" />
             <h3 className="text-base font-bold text-white">
               {searchQuery ? `No active results for "${searchQuery}"` : 'No Matching Pairs'}
@@ -631,7 +631,7 @@ export const SyndicateAnalystPage: React.FC = () => {
       {/* iOS Safari Guided Install Modal */}
       {showIOSGuide && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-2xl bg-[#0D1119] border border-slate-800 p-6 shadow-2xl space-y-4 text-center">
+          <div className="w-full max-w-sm rounded-2xl bg-[#0D1119] border border-slate-800 p-6 shadow-2xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 text-center">
             <div className="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center mx-auto text-cyan-400">
               <Share2 className="w-6 h-6" />
             </div>

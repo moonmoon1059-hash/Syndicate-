@@ -82,7 +82,7 @@ export const LargeMoveOpportunityView: React.FC<Props> = ({ report }) => {
   };
 
   return (
-    <div className="mb-6 p-4 rounded-xl bg-slate-950/80 border border-slate-800/90 shadow-xl space-y-4">
+    <div className="mb-6 p-4 rounded-xl bg-slate-950/80 border border-slate-800/90 shadow-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-slate-800">
         <div className="flex items-center gap-2">

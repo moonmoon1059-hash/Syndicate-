@@ -17,7 +17,7 @@ export const UniversalMarketCoverageBanner: React.FC = React.memo(() => {
   const { major = 15, altcoin = 26, memeHighBeta = 18, newListing = 21 } = coverageTelemetry.categoryDistribution || {};
 
   return (
-    <div className="bg-slate-900/80 rounded-2xl border border-slate-800/90 p-4 space-y-3.5 backdrop-blur-md">
+    <div className="bg-slate-900/80 rounded-2xl border border-slate-800/90 p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5 backdrop-blur-md">
       {/* Top Header Row */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/60 pb-2.5">
         <div className="flex items-center gap-2">

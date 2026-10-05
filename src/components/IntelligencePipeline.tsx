@@ -20,7 +20,7 @@ export const IntelligencePipeline: React.FC<Props> = ({ confluences, moonScore }
   };
 
   return (
-    <div className="space-y-2.5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5">
       <div className="flex items-center justify-between text-xs font-mono text-slate-400 border-b border-slate-800/80 pb-1.5">
         <span className="font-semibold text-slate-300">CONFLUENCE VERIFICATION MATRIX</span>
         <span className="text-emerald-400 font-bold">{moonScore}% VALIDATED</span>

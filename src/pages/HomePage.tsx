@@ -260,7 +260,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateTab, onSelectSigna
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-10">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-7xl mx-auto pb-10">
       {/* 1. Header Pulse Bar */}
       <section className="bg-slate-900/90 border border-slate-800 rounded-3xl p-4 sm:p-5 shadow-xl backdrop-blur-md">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
@@ -396,7 +396,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateTab, onSelectSigna
       </section>
 
       {/* 3. Hero Section: Top High-Conviction Opportunities (Score >= 95, Ranked by Target Potential) */}
-      <section className="space-y-3">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-400" />
@@ -475,7 +475,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateTab, onSelectSigna
             ))}
           </div>
         ) : (
-          <div className="p-8 rounded-3xl bg-slate-900/40 border border-slate-800/80 text-center space-y-2">
+          <div className="p-8 rounded-3xl bg-slate-900/40 border border-slate-800/80 text-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <Target className="w-8 h-8 text-slate-500 mx-auto" />
             <div className="text-sm font-bold text-slate-300 font-mono">
               {opportunityFilter === 'SUPERNOVA'
@@ -567,7 +567,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigateTab, onSelectSigna
       </section>
 
       {/* 5. Live Trade Milestones Ledger & Performance Summary */}
-      <section className="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 shadow-lg space-y-4">
+      <section className="bg-slate-900/80 border border-slate-800 rounded-3xl p-5 shadow-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
           <div>
             <h3 className="text-sm sm:text-base font-bold text-white tracking-wide flex items-center gap-2">

@@ -16,10 +16,137 @@
     <meta property="og:description" content="Professional event-driven cryptocurrency market intelligence, pre-move detection, news catalysts, new listings radar, and Telegram alert system." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-  </head>
+  
+<style id="moonscanner-institutional-theme">
+  :root {
+    --ms-bg: #06080E;
+    --ms-cyan: #00F2FE;
+    --ms-emerald: #00E676;
+    --ms-ruby: #FF3366;
+  }
+  body {
+    background-color: #06080E !important;
+    background-image: 
+      radial-gradient(at 50% 0%, rgba(14, 165, 233, 0.16) 0px, transparent 60%),
+      radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%) !important;
+    background-attachment: fixed !important;
+    color: #F8FAFC !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif !important;
+  }
+  div[class*="rounded"] {
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+  }
+  @media (min-width: 640px) {
+    div:has(> div:has([class*="SHORT"], [class*="LONG"])) {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+      gap: 16px !important;
+    }
+  }
+</style>
+
+</head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  </body>
+  
+<div id="ms-lock-screen" style="position:fixed;inset:0;background:#06080E;z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:system-ui,-apple-system,sans-serif;">
+  <div style="background:rgba(15,23,42,0.92);border:1px solid rgba(56,189,248,0.25);border-radius:18px;padding:32px 24px;width:100%;max-width:380px;box-shadow:0 25px 60px rgba(0,0,0,0.85);backdrop-filter:blur(20px);text-align:center;">
+    <div style="width:56px;height:56px;background:linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 25px rgba(0,242,254,0.4);">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div>
+    <h2 style="color:#FFF;font-size:22px;font-weight:700;margin:0 0 6px;">MoonScanner Pro</h2>
+    <p style="color:#94A3B8;font-size:13px;margin:0 0 22px;">Institutional Whale Radar • VIP Access</p>
+    
+    <div id="ms-user-flow">
+      <input id="ms-key-input" type="text" placeholder="Enter VIP Access Passcode" style="width:100%;padding:14px;background:rgba(2,6,23,0.7);border:1px solid rgba(56,189,248,0.3);border-radius:10px;color:#FFF;font-size:14px;margin-bottom:12px;box-sizing:border-box;text-align:center;font-weight:600;outline:none;" />
+      <button onclick="msUnlock()" style="width:100%;padding:14px;background:linear-gradient(135deg, #00F2FE 0%, #0072FF 100%);color:#000;font-weight:700;font-size:15px;border:none;border-radius:10px;cursor:pointer;">UNLOCK RADAR</button>
+      <p id="ms-error-msg" style="color:#FF3366;font-size:13px;margin:10px 0 0;display:none;">Invalid or Revoked Passcode</p>
+    </div>
+
+    <div id="ms-admin-flow" style="display:none;margin-top:20px;text-align:left;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;">
+      <h3 style="color:#00F2FE;font-size:13px;margin:0 0 8px;">Admin Key Manager</h3>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ms-new-key" type="text" placeholder="e.g. VIP_RAHIM" style="flex:1;padding:8px;background:rgba(2,6,23,0.7);border:1px solid #334155;border-radius:8px;color:#FFF;font-size:12px;outline:none;" />
+        <button onclick="msAddKey()" style="padding:8px 12px;background:#00E676;color:#000;border:none;border-radius:8px;font-weight:bold;font-size:12px;cursor:pointer;">ADD</button>
+      </div>
+      <div style="color:#94A3B8;font-size:11px;margin-bottom:6px;">ACTIVE KEYS:</div>
+      <div id="ms-keys-list" style="max-height:120px;overflow-y:auto;background:rgba(0,0,0,0.3);border-radius:8px;padding:8px;"></div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <button onclick="msToggleAdmin()" style="background:none;border:none;color:#64748B;font-size:11px;cursor:pointer;text-decoration:underline;">Admin Mode</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const DEFAULT_KEYS = ['MOON2026', 'VIP777'];
+  function msGetKeys() {
+    try {
+      const stored = localStorage.getItem('ms_allowed_keys');
+      return stored ? JSON.parse(stored) : DEFAULT_KEYS;
+    } catch(e) { return DEFAULT_KEYS; }
+  }
+  function msSaveKeys(keys) {
+    localStorage.setItem('ms_allowed_keys', JSON.stringify(keys));
+  }
+  function msCheckAuth() {
+    const activeKey = localStorage.getItem('ms_user_key');
+    const validKeys = msGetKeys();
+    if (activeKey && validKeys.includes(activeKey)) {
+      const lock = document.getElementById('ms-lock-screen');
+      if (lock) lock.style.display = 'none';
+    }
+  }
+  function msUnlock() {
+    const val = document.getElementById('ms-key-input').value.trim();
+    const validKeys = msGetKeys();
+    if (validKeys.includes(val)) {
+      localStorage.setItem('ms_user_key', val);
+      document.getElementById('ms-lock-screen').style.display = 'none';
+    } else {
+      const err = document.getElementById('ms-error-msg');
+      err.style.display = 'block';
+      setTimeout(() => { err.style.display = 'none'; }, 3000);
+    }
+  }
+  function msToggleAdmin() {
+    const pin = prompt('Enter Admin Master PIN:');
+    if (pin === 'admin777') {
+      const flow = document.getElementById('ms-admin-flow');
+      flow.style.display = flow.style.display === 'none' ? 'block' : 'none';
+      msRenderKeys();
+    } else if (pin) {
+      alert('Incorrect Admin PIN');
+    }
+  }
+  function msRenderKeys() {
+    const keys = msGetKeys();
+    const list = document.getElementById('ms-keys-list');
+    list.innerHTML = keys.map(k => '<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:#E2E8F0;font-size:12px;"><span>' + k + '</span><button onclick="msRevokeKey(\'' + k + '\')" style="background:#FF3366;color:#FFF;border:none;border-radius:4px;padding:2px 6px;font-size:10px;cursor:pointer;">REVOKE</button></div>').join('');
+  }
+  function msAddKey() {
+    const newK = document.getElementById('ms-new-key').value.trim();
+    if (!newK) return;
+    const keys = msGetKeys();
+    if (!keys.includes(newK)) {
+      keys.push(newK);
+      msSaveKeys(keys);
+      document.getElementById('ms-new-key').value = '';
+      msRenderKeys();
+    }
+  }
+  function msRevokeKey(k) {
+    let keys = msGetKeys().filter(item => item !== k);
+    msSaveKeys(keys);
+    msRenderKeys();
+  }
+  document.addEventListener('DOMContentLoaded', msCheckAuth);
+  msCheckAuth();
+</script>
+
+</body>
 </html>
 

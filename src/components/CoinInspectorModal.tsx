@@ -345,7 +345,7 @@ export const CoinInspectorModal: React.FC<Props> = ({ symbol, onClose, onTrade, 
         </div>
 
         {/* Modal Body */}
-        <div className="p-4 sm:p-6 overflow-y-auto space-y-4">
+        <div className="p-4 sm:p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {loading ? (
             <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-400">
               <Activity className="w-8 h-8 animate-spin text-cyan-400" />
@@ -355,7 +355,7 @@ export const CoinInspectorModal: React.FC<Props> = ({ symbol, onClose, onTrade, 
             <>
               {/* Dynamic Positional Intelligence Execution Banner */}
               {auditData.entryState === 'ACTIVE_ZONE' && (
-                <div className="p-3.5 rounded-2xl bg-emerald-950/60 border border-emerald-500/60 shadow-lg shadow-emerald-950/40 flex flex-col gap-2">
+                <div className="p-3.5 rounded-2xl bg-emerald-950/60 border border-emerald-500/60 shadow-lg shadow-emerald-950/40 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-mono font-black text-emerald-300">
                       <span className="relative flex h-2.5 w-2.5">
@@ -375,7 +375,7 @@ export const CoinInspectorModal: React.FC<Props> = ({ symbol, onClose, onTrade, 
               )}
 
               {auditData.entryState === 'WAIT_PULLBACK' && (
-                <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/50 shadow-lg shadow-amber-950/20 flex flex-col gap-2">
+                <div className="p-3.5 rounded-2xl bg-amber-950/40 border border-amber-500/50 shadow-lg shadow-amber-950/20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-300">
                       <Clock className="w-4 h-4 text-amber-400" />
@@ -453,7 +453,7 @@ export const CoinInspectorModal: React.FC<Props> = ({ symbol, onClose, onTrade, 
               </div>
 
               {/* Orderflow & Microstructure Audit */}
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5 text-cyan-400" />
                   Orderflow & Depth Audit
@@ -481,7 +481,7 @@ export const CoinInspectorModal: React.FC<Props> = ({ symbol, onClose, onTrade, 
               </div>
 
               {/* Proposed Execution Plan */}
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                   <span className="flex items-center gap-1.5">
                     <Target className="w-3.5 h-3.5 text-amber-400" />
@@ -512,7 +512,7 @@ export const CoinInspectorModal: React.FC<Props> = ({ symbol, onClose, onTrade, 
               </div>
 
               {/* Order Sizing & Margin/Leverage Controls (NO hardcoded presets) */}
-              <div className="p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-3">
+              <div className="p-3.5 rounded-2xl bg-slate-950/90 border border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <div className="flex items-center justify-between text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider">
                   <span className="flex items-center gap-1.5 text-cyan-400">
                     <Sliders className="w-3.5 h-3.5" />

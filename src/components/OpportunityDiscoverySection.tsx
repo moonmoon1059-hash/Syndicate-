@@ -31,7 +31,7 @@ export const OpportunityDiscoverySection: React.FC = () => {
   };
 
   return (
-    <div className="bg-gradient-to-b from-slate-900/90 to-slate-950 p-4 rounded-2xl border border-cyan-500/20 space-y-3.5 shadow-lg shadow-cyan-950/20">
+    <div className="bg-gradient-to-b from-slate-900/90 to-slate-950 p-4 rounded-2xl border border-cyan-500/20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5 shadow-lg shadow-cyan-950/20">
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
         <div className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export const OpportunityDiscoverySection: React.FC = () => {
             <div
               key={signal.id || signal.symbol}
               onClick={() => setSelectedSignal(signal)}
-              className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/90 hover:border-cyan-500/40 cursor-pointer transition-all hover:bg-slate-900/60 flex flex-col justify-between space-y-2.5"
+              className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/90 hover:border-cyan-500/40 cursor-pointer transition-all hover:bg-slate-900/60 flex flex-col justify-between grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5"
             >
               <div className="flex items-start justify-between">
                 <div>

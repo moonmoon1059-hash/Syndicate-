@@ -272,7 +272,7 @@ export const TradingSettingsModal: React.FC = () => {
         </div>
 
         {/* Body Content */}
-        <div className="p-5 overflow-y-auto space-y-5 flex-1">
+        <div className="p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 flex-1">
           {modalFeedback && (
             <div
               className={`p-3 rounded-xl text-xs flex items-center justify-between gap-2 ${
@@ -301,9 +301,9 @@ export const TradingSettingsModal: React.FC = () => {
 
           {/* TAB 1: EXECUTION MODE */}
           {activeTab === 'MODE' && (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {/* AUTOTRADE MASTER ENGINE CONFIGURATION */}
-              <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-slate-900/60 to-slate-950 border border-cyan-500/30 space-y-3.5 shadow-lg shadow-cyan-950/20">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/40 via-slate-900/60 to-slate-950 border border-cyan-500/30 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5 shadow-lg shadow-cyan-950/20">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2">
@@ -460,7 +460,7 @@ export const TradingSettingsModal: React.FC = () => {
 
               {/* Strong Real Trading Warning */}
               {(tradingMode === 'MANUAL' || tradingMode === 'SEMI-AUTO' || tradingMode === 'FULL-AUTO') && (
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/40 text-amber-200 text-xs space-y-2.5 animate-fade-in">
+                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/40 text-amber-200 text-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4.5 animate-fade-in">
                   <div className="font-bold flex items-center gap-1.5 text-amber-300">
                     <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
                     <span>MANDATORY WARNING: LIVE {activeExchange.toUpperCase()} TRADING</span>
@@ -530,7 +530,7 @@ export const TradingSettingsModal: React.FC = () => {
               </div>
 
               {/* Emergency Stop & Kill All Card */}
-              <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 space-y-3">
+              <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-xs font-bold text-rose-300 flex items-center gap-1.5">
@@ -572,7 +572,7 @@ export const TradingSettingsModal: React.FC = () => {
                       )}
                     </button>
                   ) : (
-                    <div className="p-3 rounded-xl bg-rose-950/90 border border-rose-500/60 space-y-2 animate-fade-in">
+                    <div className="p-3 rounded-xl bg-rose-950/90 border border-rose-500/60 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 animate-fade-in">
                       <div className="text-xs text-rose-200 font-bold flex items-center gap-1.5">
                         <AlertTriangle className="w-4 h-4 text-rose-400 animate-bounce" />
                         <span>Confirm Emergency Kill All?</span>
@@ -620,7 +620,7 @@ export const TradingSettingsModal: React.FC = () => {
 
           {/* TAB 2: RISK ENGINE LIMITS */}
           {activeTab === 'RISK' && (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-[11px] text-slate-400">
                 <span className="font-semibold text-slate-200">Hard Safety Guarantee: </span>
                 The Risk Engine executes strict mathematical boundaries before any trade entry.
@@ -779,7 +779,7 @@ export const TradingSettingsModal: React.FC = () => {
 
           {/* TAB 3: EXCHANGES CONNECTION */}
           {activeTab === 'EXCHANGES' && (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {/* Active Exchange Selector */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-2">
@@ -905,7 +905,7 @@ export const TradingSettingsModal: React.FC = () => {
               )}
 
               {/* Form to connect selected exchange */}
-              <form onSubmit={handleConnectSelectedExchange} className="space-y-3 pt-1">
+              <form onSubmit={handleConnectSelectedExchange} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1">
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-medium text-slate-300">

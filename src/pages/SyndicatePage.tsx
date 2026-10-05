@@ -139,7 +139,7 @@ export const SyndicatePage: React.FC = () => {
   const observeCount = useMemo(() => candidates.filter(c => c.tier === 'OBSERVE').length, [candidates]);
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {/* 1. EXECUTIVE HEADER */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-800/80">
         <div>
@@ -397,7 +397,7 @@ export const SyndicatePage: React.FC = () => {
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {[1, 2, 3, 4, 5, 6].map(n => (
-            <div key={n} className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5 animate-pulse space-y-4">
+            <div key={n} className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-5 animate-pulse grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               <div className="flex justify-between items-center">
                 <div className="w-24 h-4 bg-slate-800 rounded" />
                 <div className="w-16 h-4 bg-slate-800 rounded" />
@@ -425,7 +425,7 @@ export const SyndicatePage: React.FC = () => {
           ))}
         </div>
       ) : (
-        <div className="p-12 text-center rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3">
+        <div className="p-12 text-center rounded-2xl border border-slate-800 bg-slate-900/40 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <Eye className="w-10 h-10 text-slate-500 mx-auto" />
           <h3 className="text-base font-bold text-white">No Pairs Found</h3>
           <p className="text-xs text-slate-400 max-w-sm mx-auto">
