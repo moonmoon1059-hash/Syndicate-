@@ -1,4 +1,4 @@
-export * from '../../../src/pages/MoonScannerPage';
-import { MoonScannerPage } from '../../../src/pages/MoonScannerPage';
-export { MoonScannerPage };
-export default MoonScannerPage;
+export * from '../../../src/pages/SyndicatePage';
+import { SyndicatePage } from '../../../src/pages/SyndicatePage';
+export { SyndicatePage };
+export default SyndicatePage;

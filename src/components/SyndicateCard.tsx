@@ -1,9 +1,9 @@
 import React from 'react';
 import { ExternalLink, TrendingUp, TrendingDown, Zap, Shield, Eye, Flame, ShieldAlert, Rocket, Clock, CheckCircle2, Target } from 'lucide-react';
 
-export type MoonScannerTier = 'VALID' | 'CONFLUENCE' | 'OBSERVE';
-export type MoonScannerDirection = 'LONG' | 'SHORT';
-export type MoonScannerExecutionMode =
+export type SyndicateTier = 'VALID' | 'CONFLUENCE' | 'OBSERVE';
+export type SyndicateDirection = 'LONG' | 'SHORT';
+export type SyndicateExecutionMode =
   | '🚀 IMPULSE EXECUTION (NO RETEST)'
   | '⚡ ENTRY NOW'
   | '⏳ WAIT FOR RETEST'
@@ -13,15 +13,15 @@ export type MoonScannerExecutionMode =
   | '🎯 BUY THE RETEST DIP'
   | '🔥 SFP RECLAIM (LIQUIDITY HUNT COMPLETED)';
 
-export interface MoonScannerCandidate {
+export interface SyndicateCandidate {
   id: string;
   symbol: string;
   baseAsset: string;
-  direction: MoonScannerDirection;
+  direction: SyndicateDirection;
   markPrice: number;
   score: number;
-  tier: MoonScannerTier;
-  executionMode?: MoonScannerExecutionMode;
+  tier: SyndicateTier;
+  executionMode?: SyndicateExecutionMode;
   executionLabel?: string;
   executionGuidance?: string;
   entryZone?: string;
@@ -58,12 +58,12 @@ export interface MoonScannerCandidate {
   binanceUrl: string;
 }
 
-interface MoonScannerCardProps {
-  candidate: MoonScannerCandidate;
-  onSelect?: (candidate: MoonScannerCandidate) => void;
+interface SyndicateCardProps {
+  candidate: SyndicateCandidate;
+  onSelect?: (candidate: SyndicateCandidate) => void;
 }
 
-export const MoonScannerCard: React.FC<MoonScannerCardProps> = ({ candidate, onSelect }) => {
+export const SyndicateCard: React.FC<SyndicateCardProps> = ({ candidate, onSelect }) => {
   const isLong = candidate.direction === 'LONG';
   const isValid = candidate.tier === 'VALID';
   const isConfluence = candidate.tier === 'CONFLUENCE';

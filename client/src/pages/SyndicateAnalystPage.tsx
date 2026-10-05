@@ -1,4 +1,4 @@
-export * from '../../../src/pages/MoonScannerAnalystPage';
-import { MoonScannerAnalystPage } from '../../../src/pages/MoonScannerAnalystPage';
-export { MoonScannerAnalystPage };
-export default MoonScannerAnalystPage;
+export * from '../../../src/pages/SyndicateAnalystPage';
+import { SyndicateAnalystPage } from '../../../src/pages/SyndicateAnalystPage';
+export { SyndicateAnalystPage };
+export default SyndicateAnalystPage;

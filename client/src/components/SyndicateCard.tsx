@@ -1,4 +1,4 @@
-export * from '../../../src/components/MoonScannerCard';
-import { MoonScannerCard } from '../../../src/components/MoonScannerCard';
-export { MoonScannerCard };
-export default MoonScannerCard;
+export * from '../../../src/components/SyndicateCard';
+import { SyndicateCard } from '../../../src/components/SyndicateCard';
+export { SyndicateCard };
+export default SyndicateCard;

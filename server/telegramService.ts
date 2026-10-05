@@ -1229,23 +1229,23 @@ ${headerIcon} <b>#${cleanSym} | ${params.direction} — ${title}</b>
   return res.success;
 }
 
-const moonscannerDispatchedCooldownMap = new Map<string, number>();
-const MOONSCANNER_COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes anti-spam gate
+const syndicateDispatchedCooldownMap = new Map<string, number>();
+const SYNDICATE_COOLDOWN_MS = 30 * 60 * 1000; // 30 minutes anti-spam gate
 
-export function isSymbolInMoonScannerCooldown(symbol: string): boolean {
+export function isSymbolInSyndicateCooldown(symbol: string): boolean {
   const clean = symbol.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-  const lastTime = moonscannerDispatchedCooldownMap.get(clean);
+  const lastTime = syndicateDispatchedCooldownMap.get(clean);
   if (!lastTime) return false;
-  return Date.now() - lastTime < MOONSCANNER_COOLDOWN_MS;
+  return Date.now() - lastTime < SYNDICATE_COOLDOWN_MS;
 }
 
-export function markSymbolMoonScannerCooldown(symbol: string): void {
+export function markSymbolSyndicateCooldown(symbol: string): void {
   const clean = symbol.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-  moonscannerDispatchedCooldownMap.set(clean, Date.now());
+  syndicateDispatchedCooldownMap.set(clean, Date.now());
 }
 
 /**
- * Dispatches institutional MoonScanner Pro VIP alert to Telegram
+ * Dispatches institutional Syndicate Analyst VIP alert to Telegram
  * STRICT HARDENED CONFLUENCE FILTER:
  * 1) Score >= 100 and tier == VALID
  * 2) Volume Multiplier >= 3.0x baseline
@@ -1253,7 +1253,7 @@ export function markSymbolMoonScannerCooldown(symbol: string): void {
  * 4) Structural Clearance: Resist Dist <= 3.0% (LONG) or Support Dist <= 3.0% (SHORT)
  * 5) Strict 30-minute cooldown per symbol
  */
-export async function dispatchMoonScannerTelegramAlert(candidate: {
+export async function dispatchSyndicateTelegramAlert(candidate: {
   symbol: string;
   direction: 'LONG' | 'SHORT';
   markPrice: number;
@@ -1336,7 +1336,7 @@ export async function dispatchMoonScannerTelegramAlert(candidate: {
   }
 
   // 2. Strict 30-minute cooldown per symbol
-  if (isSymbolInMoonScannerCooldown(candidate.symbol)) {
+  if (isSymbolInSyndicateCooldown(candidate.symbol)) {
     return { success: false, error: `Symbol #${candidate.symbol} is in 30-minute Telegram cooldown` };
   }
 
@@ -1411,7 +1411,7 @@ export async function dispatchMoonScannerTelegramAlert(candidate: {
 
   let caption = '';
   if (isSfp) {
-    caption = `🏛 <b>MoonScanner Terminal</b> | <b>🔥 SFP RECLAIM (SPRING REVERSAL)</b>
+    caption = `🏛 <b>SYNDICATE TERMINAL</b> | <b>🔥 SFP RECLAIM (SPRING REVERSAL)</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━
 <b>Asset:</b> <code>#${cleanSym}</code>
 <b>Execution:</b> <b>${escapeXml(executionState)}</b>
@@ -1436,7 +1436,7 @@ export async function dispatchMoonScannerTelegramAlert(candidate: {
 🔗 <a href="https://www.binance.com/en/futures/${cleanSym}"><b>Open Binance Futures Chart</b></a>
 🕒 <i>${bstTime}</i>`;
   } else {
-    caption = `🏛 <b>MoonScanner Terminal</b> | <b>${dirLabel}</b>
+    caption = `🏛 <b>SYNDICATE TERMINAL</b> | <b>${dirLabel}</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━
 <b>Asset:</b> <code>#${cleanSym}</code>
 <b>Execution:</b> <b>${escapeXml(executionState)}</b>
@@ -1464,7 +1464,7 @@ export async function dispatchMoonScannerTelegramAlert(candidate: {
 
   const res = await sendRawTelegramMessage(caption);
   if (res.success) {
-    markSymbolMoonScannerCooldown(candidate.symbol);
+    markSymbolSyndicateCooldown(candidate.symbol);
     dispatchedInvalidations.delete(cleanSym); // Reset invalidation one-shot latch for newly signaled pair
   }
   return res;
@@ -1489,16 +1489,16 @@ export function isInvalidationDispatched(symbol: string): boolean {
 /**
  * Directly dispatches an SFP Reclaim VIP alert to Telegram channel
  */
-export async function dispatchMoonScannerSfpReclaimAlert(candidate: Parameters<typeof dispatchMoonScannerTelegramAlert>[0]): Promise<{ success: boolean; error?: string }> {
-  return await dispatchMoonScannerTelegramAlert(candidate);
+export async function dispatchSyndicateSfpReclaimAlert(candidate: Parameters<typeof dispatchSyndicateTelegramAlert>[0]): Promise<{ success: boolean; error?: string }> {
+  return await dispatchSyndicateTelegramAlert(candidate);
 }
 
 /**
  * Directly dispatches a formatted live verification alert to Telegram channel
  */
-export async function dispatchMoonScannerTestVerification(): Promise<{ success: boolean; error?: string }> {
+export async function dispatchSyndicateTestVerification(): Promise<{ success: boolean; error?: string }> {
   const bstTime = getBangladeshTimeString();
-  const text = `✅ <b>MOONSCANNER TELEGRAM GATEWAY: ONLINE & VERIFIED</b>\n\n` +
+  const text = `✅ <b>SYNDICATE TELEGRAM GATEWAY: ONLINE & VERIFIED</b>\n\n` +
     `⚡ <i>Real-time whale pump & dump alerts are armed and monitoring.</i>\n\n` +
     `🐋 <b>Radar Engine:</b> Active (Dual-Mode Smart Entry)\n` +
     `🛡️ <b>BTC Dump Shield:</b> Engaged\n` +
@@ -1512,7 +1512,7 @@ export async function dispatchMoonScannerTestVerification(): Promise<{ success: 
  * Dispatches a clean 1-line invalidation update when a VALID coin breaches its Invalidation Floor (SL)
  * STRICT ONE-SHOT BROADCAST: Never spam or repeat for the same coin.
  */
-export async function dispatchMoonScannerInvalidationAlert(params: {
+export async function dispatchSyndicateInvalidationAlert(params: {
   symbol: string;
   slPrice: number;
 }): Promise<{ success: boolean; error?: string }> {
@@ -1526,7 +1526,7 @@ export async function dispatchMoonScannerInvalidationAlert(params: {
   dispatchedInvalidations.add(cleanSym);
 
   const slFmt = formatPrice(params.slPrice);
-  const text = `🛑 <b>MOONSCANNER RADAR: #${cleanSym}</b> Invalidation Floor ($${slFmt}) breached. Trade setup closed.`;
+  const text = `🛑 <b>SYNDICATE RADAR: #${cleanSym}</b> Invalidation Floor ($${slFmt}) breached. Trade setup closed.`;
   return await sendRawTelegramMessage(text);
 }
 

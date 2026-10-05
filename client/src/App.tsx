@@ -1,6 +1,6 @@
 import React from 'react';
-import { MoonScannerAnalystPage } from './pages/MoonScannerAnalystPage';
+import { SyndicateAnalystPage } from './pages/SyndicateAnalystPage';
 
 export default function App() {
-  return <MoonScannerAnalystPage />;
+  return <SyndicateAnalystPage />;
 }
