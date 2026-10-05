@@ -444,7 +444,7 @@ export const SyndicateCard: React.FC<SyndicateCardProps> = ({ candidate, onSelec
         onClick={(e) => e.stopPropagation()}
         className="mt-2 w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl font-bold text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700/60 transition-colors"
       >
-        <span>Open Binance Futures Chart</span>
+        <span>Live TradingView Chart</span>
         <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
       </a>
     </div>

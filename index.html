@@ -147,6 +147,74 @@
   msCheckAuth();
 </script>
 
+
+<!-- In-App TradingView Live Chart Modal -->
+<div id="ms-tv-modal" style="display:none;position:fixed;inset:0;background:rgba(4,6,10,0.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:9999999;align-items:center;justify-content:center;padding:12px;font-family:system-ui,-apple-system,sans-serif;">
+  <div style="background:#080D1A;border:1px solid rgba(56,189,248,0.3);border-radius:18px;width:100%;max-width:960px;height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.95);">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.08);background:#050810;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span id="ms-tv-symbol" style="color:#00F2FE;font-weight:700;font-size:16px;letter-spacing:0.5px;">BTCUSDT</span>
+        <span style="background:rgba(0,230,118,0.15);color:#00E676;border:1px solid rgba(0,230,118,0.3);padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600;">TradingView Pro Live</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a id="ms-tv-external" href="#" target="_blank" style="color:#94A3B8;text-decoration:none;font-size:12px;padding:6px 12px;background:rgba(255,255,255,0.06);border-radius:8px;border:1px solid rgba(255,255,255,0.12);">Open Full Tab ↗</a>
+        <button onclick="closeTvModal()" style="background:#FF3366;color:#FFF;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;font-weight:bold;font-size:13px;">✕ Close</button>
+      </div>
+    </div>
+    <div style="flex:1;width:100%;height:100%;position:relative;background:#06080E;">
+      <iframe id="ms-tv-iframe" src="" style="width:100%;height:100%;border:none;"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.openTradingViewModal = function(rawSymbol) {
+    if (!rawSymbol) return;
+    let s = rawSymbol.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    if (!s.endsWith('USDT') && !s.endsWith('PERP')) s += 'USDT';
+    const tvPair = 'BINANCE:' + s + '.P';
+    const embedUrl = 'https://s.tradingview.com/widgetembed/?symbol=' + encodeURIComponent(tvPair) + '&interval=15&theme=dark&style=1&timezone=Asia%2FDhaka&studies=%5B%5D&hideideas=1';
+    
+    document.getElementById('ms-tv-symbol').textContent = s + ' (15m Candle)';
+    document.getElementById('ms-tv-external').href = 'https://www.tradingview.com/chart/?symbol=' + encodeURIComponent(tvPair);
+    document.getElementById('ms-tv-iframe').src = embedUrl;
+    
+    const m = document.getElementById('ms-tv-modal');
+    m.style.display = 'flex';
+  };
+
+  window.closeTvModal = function() {
+    const m = document.getElementById('ms-tv-modal');
+    m.style.display = 'none';
+    document.getElementById('ms-tv-iframe').src = '';
+  };
+
+  // Click Interceptor: Catch any click on Chart / Binance buttons and open in-app TradingView
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('a, button, [role="button"]');
+    if (!btn) return;
+    const txt = (btn.textContent || '').trim();
+    const href = btn.getAttribute('href') || '';
+    if (txt.includes('Binance') || txt.includes('TradingView') || txt.includes('Chart') || href.includes('binance.com')) {
+      const card = btn.closest('div[class*="rounded"], [class*="border"]');
+      let sym = '';
+      if (card) {
+        const m = card.textContent.match(/\b([A-Z0-9]{3,12}USDT)\b/);
+        if (m) sym = m[1];
+      }
+      if (!sym && href) {
+        const m = href.match(/([A-Z0-9]+USDT)/i);
+        if (m) sym = m[1];
+      }
+      if (sym) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.openTradingViewModal(sym);
+      }
+    }
+  }, true);
+</script>
+
 </body>
 </html>
 
