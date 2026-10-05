@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">MoonScanner</string>
-    <string name="title_activity_main">MoonScanner</string>
+    <string name="app_name">MoonScanner Pro</string>
+    <string name="title_activity_main">MoonScanner Pro</string>
     <string name="package_name">com.moonscanner.app</string>
     <string name="custom_url_scheme">com.moonscanner.app</string>
 </resources>

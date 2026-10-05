@@ -1,21 +1,23 @@
 {
-  "id": "/",
-  "short_name": "Syndicate",
-  "name": "Syndicate Analyst — Whale Radar",
-  "description": "Autonomous dual-mode institutional whale footprint and structural orderflow execution radar.",
+  "name": "MoonScanner Pro",
+  "short_name": "MoonScanner",
+  "description": "Institutional Binance Futures Whale Radar",
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
+  "background_color": "#06080E",
+  "theme_color": "#06080E",
   "orientation": "portrait",
-  "theme_color": "#0B0E14",
-  "background_color": "#0B0E14",
-  "categories": ["finance", "crypto", "business"],
   "icons": [
     {
       "src": "/icon.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
-      "purpose": "any"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
     }
   ]
 }

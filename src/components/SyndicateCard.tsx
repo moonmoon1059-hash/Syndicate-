@@ -429,7 +429,7 @@ export const SyndicateCard: React.FC<SyndicateCardProps> = ({ candidate, onSelec
             {candidate.reasons.slice(0, 2).map((reason, idx) => (
               <div key={idx} className="text-[11px] text-slate-400 flex items-start gap-1.5 leading-snug">
                 <span className="text-emerald-400 mt-0.5 flex-shrink-0">•</span>
-                <span className="truncate">{reason}</span>
+                <span className="truncate" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-[11px] font-semibold bg-cyan-950/60 text-cyan-300 border border-cyan-500/30">⏱ Alert: {reason}</span>
               </div>
             ))}
           </div>

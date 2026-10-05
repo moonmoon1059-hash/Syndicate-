@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.moonscanner.app',
-  appName: 'MoonScanner',
+  appName: 'MoonScanner Pro',
   webDir: 'dist',
   server: {
     androidScheme: 'https',
