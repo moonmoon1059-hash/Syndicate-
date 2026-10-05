@@ -289,7 +289,7 @@ async function getBtcMacroDumpShieldStatus(): Promise<BtcMacroStatus> {
   }
 
   try {
-    const res = await fetch('https://fapi3.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=20', {
+    const res = await fetch('https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=15m&limit=20', {
       signal: AbortSignal.timeout(3500)
     });
     if (!res.ok) return cachedBtcMacro;
@@ -352,7 +352,7 @@ async function fetchOpenInterestDelta(symbol: string): Promise<number> {
   }
 
   try {
-    const res = await fetch(`https://fapi3.binance.com/futures/data/openInterestHist?symbol=${cleanSym}&period=1h&limit=2`, {
+    const res = await fetch(`https://fapi.binance.com/futures/data/openInterestHist?symbol=${cleanSym}&period=1h&limit=2`, {
       signal: AbortSignal.timeout(3000)
     });
     if (!res.ok) {
@@ -521,7 +521,7 @@ async function fetch15mCandleMetrics(symbol: string, currentPrice: number, direc
   }
 
   try {
-    const res = await fetch(`https://fapi3.binance.com/fapi/v1/klines?symbol=${cleanSym}&interval=15m&limit=21`, {
+    const res = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${cleanSym}&interval=15m&limit=21`, {
       signal: AbortSignal.timeout(3500)
     });
 
@@ -1622,8 +1622,8 @@ export async function inspectSinglePair(rawSymbol: string): Promise<SyndicateCan
 
     try {
       const [tickerRes, premiumRes, btcMacro] = await Promise.all([
-        fetch(`https://fapi3.binance.com/fapi/v1/ticker/24hr?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
-        fetch(`https://fapi3.binance.com/fapi/v1/premiumIndex?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
+        fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
+        fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${sym}`, { signal: AbortSignal.timeout(4500) }),
         getBtcMacroDumpShieldStatus()
       ]);
 
@@ -1708,8 +1708,8 @@ export async function runSyndicateScan(): Promise<SyndicateCandidate[]> {
   try {
     // 1. Concurrently fetch Tickers, Premium Index, and BTC Macro Shield status
     const [tickerRes, premiumRes, btcMacro] = await Promise.all([
-      fetch('https://fapi3.binance.com/fapi/v1/ticker/24hr', { signal: AbortSignal.timeout(65000) }),
-      fetch('https://fapi3.binance.com/fapi/v1/premiumIndex', { signal: AbortSignal.timeout(65000) }),
+      fetch('https://fapi.binance.com/fapi/v1/ticker/24hr', { signal: AbortSignal.timeout(65000) }),
+      fetch('https://fapi.binance.com/fapi/v1/premiumIndex', { signal: AbortSignal.timeout(65000) }),
       getBtcMacroDumpShieldStatus()
     ]);
 
